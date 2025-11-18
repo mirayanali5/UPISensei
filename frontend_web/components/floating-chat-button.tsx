@@ -7,7 +7,11 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import AIChatbot from './ai-chatbot'
 import { cn } from '@/lib/utils'
 
-export default function FloatingChatButton() {
+interface FloatingChatButtonProps {
+  userId?: string
+}
+
+export default function FloatingChatButton({ userId }: FloatingChatButtonProps) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -44,7 +48,7 @@ export default function FloatingChatButton() {
 
           {/* Chatbot Component */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            <AIChatbot />
+            <AIChatbot userId={userId} />
           </div>
         </SheetContent>
       </Sheet>

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useState, ReactNode } from 'react'
+import { apiService } from '@/lib/api-service'
 
 export interface User {
   id: string
@@ -24,8 +25,7 @@ const DEMO_ACCOUNT = {
   email: 'demo@upisensei.com',
   password: 'demo123',
   name: 'Saad Ahmed',
-  phone: '+91 9876543210',
-  id: 'user_001'
+  phone: '+919876543210', // Phone without spaces for API
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -34,13 +34,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<boolean> => {
     // Demo login - accepts demo credentials
     if (email === DEMO_ACCOUNT.email && password === DEMO_ACCOUNT.password) {
-      setUser({
-        id: DEMO_ACCOUNT.id,
-        email: DEMO_ACCOUNT.email,
-        name: DEMO_ACCOUNT.name,
-        phone: DEMO_ACCOUNT.phone,
-      })
-      return true
+      try {
+        // Get or create user in backend using phone number
+        const backendUser = await apiService.getUserByPhone(DEMO_ACCOUNT.phone)
+        
+        setUser({
+          id: backendUser.id, // Use UUID from backend
+          email: DEMO_ACCOUNT.email,
+          name: backendUser.name || DEMO_ACCOUNT.name,
+          phone: backendUser.phone,
+        })
+        return true
+      } catch (error) {
+        console.error('Error fetching user from backend:', error)
+        // Fallback: still allow login but user won't have valid UUID
+        // This allows the app to work even if backend is down
+        setUser({
+          id: 'demo-user-fallback',
+          email: DEMO_ACCOUNT.email,
+          name: DEMO_ACCOUNT.name,
+          phone: DEMO_ACCOUNT.phone,
+        })
+        return true
+      }
     }
     return false
   }
@@ -48,13 +64,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signup = async (email: string, password: string, name: string, phone: string): Promise<boolean> => {
     // Simple signup - creates a new user
     if (email && password && name && phone) {
-      setUser({
-        id: `user_${Date.now()}`,
-        email,
-        name,
-        phone,
-      })
-      return true
+      try {
+        // Normalize phone number (remove spaces, ensure +91 prefix)
+        const normalizedPhone = phone.replace(/\s/g, '').startsWith('+91') 
+          ? phone.replace(/\s/g, '') 
+          : `+91${phone.replace(/\s/g, '')}`
+        
+        // Get or create user in backend
+        const backendUser = await apiService.getUserByPhone(normalizedPhone)
+        
+        setUser({
+          id: backendUser.id, // Use UUID from backend
+          email,
+          name: backendUser.name || name,
+          phone: backendUser.phone,
+        })
+        return true
+      } catch (error) {
+        console.error('Error creating user in backend:', error)
+        // Fallback: create local user
+        setUser({
+          id: `user_${Date.now()}`,
+          email,
+          name,
+          phone,
+        })
+        return true
+      }
     }
     return false
   }

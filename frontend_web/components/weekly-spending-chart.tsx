@@ -2,24 +2,52 @@
 
 import { useState } from 'react'
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
+import { SpendingSummary } from '@/lib/api-service'
 
-export default function WeeklySpendingChart() {
-  const data = [
-    { name: 'Food 🍕', value: 35, color: '#DC2626' },
-    { name: 'Groceries 🛒', value: 25, color: '#059669' },
-    { name: 'Transport 🚗', value: 15, color: '#0284C7' },
-    { name: 'Bills 📋', value: 15, color: '#D97706' },
-    { name: 'Shopping 🛍️', value: 10, color: '#7C3AED' },
-  ]
+interface WeeklySpendingChartProps {
+  summary?: SpendingSummary | null
+}
 
+const COLORS = [
+  '#DC2626', '#059669', '#0284C7', '#D97706', '#7C3AED', 
+  '#EC4899', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4'
+]
+
+const CATEGORY_EMOJIS: { [key: string]: string } = {
+  'Food & Dining': '🍕',
+  'Groceries': '🛒',
+  'Transportation': '🚗',
+  'Bills & Recharges': '📋',
+  'Shopping': '🛍️',
+  'Entertainment': '🎬',
+  'Utilities': '⚡',
+  'Healthcare': '🏥',
+  'Education': '📚',
+  'Travel': '✈️',
+  'Income': '💰',
+  'Investment': '📈',
+  'Other': '📦'
+}
+
+export default function WeeklySpendingChart({ summary }: WeeklySpendingChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
+
+  // Transform summary data into chart format
+  const data = summary?.categories?.slice(0, 10).map((cat, index) => ({
+    name: `${cat.category} ${CATEGORY_EMOJIS[cat.category] || ''}`,
+    value: cat.percentage,
+    amount: cat.amount,
+    color: COLORS[index % COLORS.length]
+  })) || []
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
+      const data = payload[0].payload
       return (
         <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-          <p className="text-sm font-bold text-foreground">{payload[0].name}</p>
-          <p className="text-sm font-bold" style={{ color: payload[0].payload.color }}>{payload[0].value}%</p>
+          <p className="text-sm font-bold text-foreground">{data.name}</p>
+          <p className="text-sm font-bold" style={{ color: data.color }}>{data.value.toFixed(1)}%</p>
+          <p className="text-xs text-muted-foreground">₹{data.amount.toLocaleString('en-IN')}</p>
         </div>
       )
     }
@@ -30,13 +58,22 @@ export default function WeeklySpendingChart() {
     setActiveIndex(activeIndex === index ? null : index)
   }
 
+  if (!summary || data.length === 0) {
+    return (
+      <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
+        <h3 className="text-lg font-bold mb-4">Monthly Expenditure Breakdown</h3>
+        <p className="text-muted-foreground text-center py-8">No spending data available</p>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-card border border-border rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-bold">Monthly Expenditure Breakdown</h3>
-        <a href="#" className="text-sm text-primary hover:text-accent transition-colors font-medium">
-          View more
-        </a>
+        <p className="text-sm text-muted-foreground">
+          Total: ₹{summary.total_spent.toLocaleString('en-IN')}
+        </p>
       </div>
 
       <div className="flex flex-col items-center">
@@ -86,7 +123,7 @@ export default function WeeklySpendingChart() {
               />
               <div className="flex-1">
                 <p className="text-sm font-medium group-hover:text-primary transition-colors">{item.name}</p>
-                <p className="text-xs text-muted-foreground font-bold">{item.value}%</p>
+                <p className="text-xs text-muted-foreground font-bold">{item.value.toFixed(1)}%</p>
               </div>
             </div>
           ))}

@@ -1,13 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-  devIndicators: false,
-  typescript: {
-    ignoreBuildErrors: true,
+  // Enable standalone output for better deployment
+  output: 'standalone',
+  
+  // Environment variables
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
   },
+  
+  // Image optimization
   images: {
-    unoptimized: true,
+    domains: [],
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

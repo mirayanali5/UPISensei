@@ -43,7 +43,11 @@ const MarkdownContent = ({ content }: { content: string }) => {
   )
 }
 
-export default function AIChatbot() {
+interface AIChatbotProps {
+  userId?: string
+}
+
+export default function AIChatbot({ userId }: AIChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -93,12 +97,16 @@ export default function AIChatbot() {
         }
       }
 
-      const response = await fetch('/api/chat', {
+      if (!userId) {
+        throw new Error('User ID is required. Please log in.');
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/chat/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: input,
-          fileIds: fileIds.length > 0 ? fileIds : undefined
+          user_id: userId,
+          message: input
         }),
       });
 
@@ -110,8 +118,10 @@ export default function AIChatbot() {
       const assistantMessageData = await response.json();
 
       const assistantMessage: Message = {
-        ...assistantMessageData,
-        timestamp: assistantMessageData.timestamp || new Date().toISOString()
+        id: Date.now().toString(),
+        type: 'assistant',
+        content: assistantMessageData.response || assistantMessageData.content || 'No response received',
+        timestamp: new Date().toISOString()
       };
 
       setMessages(prev => [...prev, assistantMessage]);
@@ -163,7 +173,11 @@ export default function AIChatbot() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('/api/upload', {
+      const endpoint = file.name.toLowerCase().endsWith('.pdf') 
+        ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/upload/pdf`
+        : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/upload/csv`;
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         body: formData,
       });
@@ -171,14 +185,23 @@ export default function AIChatbot() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Upload failed');
+        throw new Error(result.detail || result.error || 'Upload failed');
       }
 
       setUploadedFiles(prev =>
         prev.map(f =>
-          f.id === newFile.id ? { ...f, id: result.fileId, processing: false } : f
+          f.id === newFile.id ? { ...f, id: result.user?.id || 'uploaded', processing: false } : f
         )
       );
+
+      // Add success message
+      const successMessage: Message = {
+        id: Date.now().toString(),
+        type: 'assistant',
+        content: `✅ Successfully processed ${result.transaction_count || 0} transactions from ${file.name}. I can now help you analyze your spending!`,
+        timestamp: new Date().toISOString()
+      };
+      setMessages(prev => [...prev, successMessage]);
 
       if (uploadedFiles.length === 0) {
         setInput(`I've uploaded ${file.name}. Can you analyze my transactions?`);
