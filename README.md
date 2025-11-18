@@ -228,12 +228,14 @@ Strong user demand + high technical feasibility + private offline processing = U
 
 
 ## ✨ Icon
+<img width="500" height="500" alt="UpiSensei" src="https://github.com/user-attachments/assets/5c73c8d7-2f85-40ba-8708-f06e1685e058" />
 
 - Soon
 
 ## 🔰 Banner
+<img width="86" height="78" alt="UpiSenseifav" src="https://github.com/user-attachments/assets/ce1776bd-1f61-49b9-8a09-db4d9d811ea3" />
 
-- Soon
+
 
 ---
 
