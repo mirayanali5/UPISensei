@@ -17,7 +17,7 @@ export default function AIAgentChatbot() {
     {
       id: '1',
       type: 'bot',
-      content: 'Hey! I\'m your SpendPilot AI Agent. Upload your UPI transaction PDF and I\'ll analyze your spending patterns, find savings opportunities, and give you personalized financial advice.',
+      content: 'Hey! I\'m your UPISensei AI Agent. Upload your UPI transaction PDF and I\'ll analyze your spending patterns, find savings opportunities, and give you personalized financial advice.',
       timestamp: new Date(),
     },
   ])

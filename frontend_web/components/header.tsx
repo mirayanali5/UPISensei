@@ -10,7 +10,7 @@ export default function Header() {
             <Zap className="w-6 h-6 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="font-black text-lg tracking-tight text-foreground">SpendPilot</h1>
+            <h1 className="font-black text-lg tracking-tight text-foreground">UPISensei</h1>
             <p className="text-xs text-muted-foreground">Your Money Moves</p>
           </div>
         </div>
