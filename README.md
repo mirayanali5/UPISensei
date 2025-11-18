@@ -56,10 +56,10 @@
 
 ## ⚙️ Platforms
 
-| Platform                                                       | Supported? |
-| --------------------------------------------------------------- | ----------- |
+| Platform                                                         | Supported?  |
+| ---------------------------------------------------------------  | ----------- |
 | Web (any browser with JS functionality) + Fully Responsive       | ✅          |
-| [Android](frontend_android/) (non-natively through WebView)                | ✅          |
+| [Android](frontend_android/) (non-natively through WebView)      | ✅          |
 
 ## 🛠️ Tech Stack
 
@@ -98,12 +98,14 @@
 
 ## 📱 Screenshots *
 <!--
-<table> <tr> <td><strong>Landing Page</strong><br><br> <img> </td> </tr> </table>
+<table> 
+<tr> <td><strong>Landing Page</strong><br><br> <img> </td> </tr> 
+</table>
 -->
 
 
 
-## 👥 Our Hacknovate 2025 Team (DevBandits)
+## 👥 Our Hacknovate Hackathon 2025 Team (#33 DevBandits)
 
 <div align="center">
 
