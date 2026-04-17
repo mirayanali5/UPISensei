@@ -187,11 +187,11 @@ Strong user demand + high technical feasibility + private offline processing = U
 |  #  |     Team Member      |              Role              | GitHub Profile |
 | :-: | :------------------: | :----------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: |
 |  1  | Shoeb Ahmed| 💼 Solutions Engineer               | [🔗 z](https://github.com/z) |
-|  2  | Mir Ayan Ali   | 🎨 UI/UX Designer                   | [🔗 z](https://github.com/z) |
+|  2  | Mir Ayan Ali   | 🎨 UI/UX Designer                   | [🔗 z](https://github.com/mirayanali5) |
 |  3  | Fareed Ahmed Owais  | 🎯 Team Lead                        | [🔗 z](https://github.com/z) |
 |  4  | Mohammed Saad Uddin  | 🚀 Full-stack + AI/ML Developer     | [🔗 z](https://github.com/z) |
-|  5  | Mohammed Mugees| 🖼️ Front-end Developer             | [🔗 z](https://github.com/z) |
-|  6  | Abdur Rahman Qasim    | 🔎 Research Engineer                | [🔗 z](https://github.com/z) |
+|  5  | Mohammed Mugees| 🖼️ Front-end Developer             | [🔗 z](https://github.com/mug3es) |
+|  6  | Abdur Rahman Qasim    | 🔎 Research Engineer                | [🔗 z](https://github.com/XSHOAIB) |
 
 </div>
 
